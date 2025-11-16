@@ -1,14 +1,11 @@
 'use client';
 
-// import { CardWrapper } from '@//components/auth/card-wrapper';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FormInput } from '../ui/form-input';
-
-import dynamic from 'next/dynamic';
 import { Form } from '../ui/form';
 import { useTranslation } from 'react-i18next';
 import { loginSchema } from '@/schemas';
@@ -43,9 +40,8 @@ const LoginForm = () => {
         setisPending(false);
 
         if (data?.status === 200) {
-          router.push('dashboard');
+          router.push('/job-list');
         } else {
-          // setisPending(false);
           toast.error('Something went wrong.');
         }
       })

@@ -1,12 +1,21 @@
-// import AppDashboardLayout from '@/layout/mainLayout.tsx';
-import ProtectLayout from '@/layout/protectLayout';
-import React, { ReactNode } from 'react';
+'use client';
 
-const LayoutMain = async ({ children }: { children: ReactNode }) => {
+// import AppDashboardLayout from '@/layout/mainLayout.tsx';
+import { ReactNode } from 'react';
+import ProtectLayout from '@/layout/protectLayout';
+import { useSession } from 'next-auth/react';
+import MainLayout from '@/layout/mainLayout';
+
+const LayoutMain = ({ children }: { children: ReactNode }) => {
+  const { data: session } = useSession();
+
   return (
     <ProtectLayout>
-      {children}
-      {/* <AppDashboardLayout>{children}</AppDashboardLayout> */}
+      <MainLayout>
+        {session?.user?.role === 'admin' && <>{children}</>}
+
+        {session?.user?.role === 'applicant' && <>{children}</>}
+      </MainLayout>
     </ProtectLayout>
   );
 };

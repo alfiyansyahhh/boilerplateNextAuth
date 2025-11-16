@@ -22,6 +22,7 @@ type FormInputProps<T extends FieldValues> =
     labelPosition?: 'top' | 'left';
     labelWidth?: string;
     inputWidth?: string;
+    labelSize?: string;
     type?: 'text' | 'password' | 'textarea' | string;
     rightUtil?: React.ReactNode;
     labelWeight?: string;
@@ -40,6 +41,7 @@ export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
     labelPosition = 'top',
     labelWidth = 'w-[150px]',
     inputWidth = 'w-full',
+    labelSize = 'font-medium',
     labelWeight = 'font-normal',
     ...rest
   } = props;
@@ -71,50 +73,37 @@ export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
           >
             <FormLabel
               className={cn(
-                'text-[16px]',
+                labelSize,
+
                 labelPosition === 'left' && `${labelWidth} min-w-fit `,
                 labelWeight
               )}
             >
-              {t(label)}
+              {t(label)} <div className='text-red-500 -ml-2'>*</div>
             </FormLabel>
 
             <div className={cn('flex items-center gap-2 w-full', inputWidth)}>
               <FormControl>
                 <div className='relative w-full'>
-                  {type === 'textarea' ? (
-                    <textarea
-                      {...field}
-                      ref={field.ref as React.Ref<HTMLTextAreaElement>}
-                      className={cn(
-                        disabled && 'bg-[#eeeeee] text-[#919191]',
-                        'h-[200px] border placeholder:text-[#94A3B8] py-4 px-3.5 resize-none rounded-md w-full'
-                      )}
-                      disabled={isPending || disabled}
-                    />
-                  ) : (
-                    <Input
-                      {...field}
-                      {...rest}
-                      placeholder={t(placeholder ?? '')}
-                      type={
-                        type === 'password' && !showPassword ? type : 'text'
+                  <Input
+                    {...field}
+                    {...rest}
+                    placeholder={t(placeholder ?? '')}
+                    type={type === 'password' && !showPassword ? type : 'text'}
+                    value={type === 'password' ? passwordValue : field?.value}
+                    onChange={(e) => {
+                      if (type === 'password') {
+                        setPasswordValue(e.target.value);
                       }
-                      value={type === 'password' ? passwordValue : field?.value}
-                      onChange={(e) => {
-                        if (type === 'password') {
-                          setPasswordValue(e.target.value);
-                        }
-                        field.onChange(e);
-                      }}
-                      isError={!noShowError && fieldState.error}
-                      className={cn(
-                        disabled && 'bg-[#DDDDDD]',
-                        'h-10 border placeholder:text-[#94A3B8] py-4 px-3.5 w-full'
-                      )}
-                      disabled={isPending || disabled}
-                    />
-                  )}
+                      field.onChange(e);
+                    }}
+                    isError={!noShowError && fieldState.error}
+                    className={cn(
+                      disabled && 'bg-[#DDDDDD]',
+                      'h-10 border placeholder:text-[#94A3B8] py-4 px-3.5 w-full'
+                    )}
+                    disabled={isPending || disabled}
+                  />
 
                   {type === 'password' && (
                     <div

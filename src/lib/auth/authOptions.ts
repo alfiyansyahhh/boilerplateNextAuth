@@ -28,45 +28,29 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials: any) {
         const { email, password } = credentials;
 
-        console.log(email, password, 'ubu');
-
-        // Validate the input fields
         if (!email || !password) {
-          console.log('Error: Missing email or password');
           throw new Error('Missing email or password');
         }
 
         const data: any = { email, password };
 
         try {
-          console.log('Making request to login API');
           let baseURL =
             process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000/';
 
-          const response = await axios.post(
-            `${baseURL}api/login`, // Make sure to use absolute URL
-            data,
-            {
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-
-          // Check if the response is successful
-          console.log('API Response:', response);
+          const response = await axios.post(`${baseURL}api/login`, data, {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+          });
 
           if (response?.status === 200 && response.data.success) {
-            console.log('Login successful:', response.data);
             return response.data;
           }
 
-          // If login fails
-          console.log('Login failed:', response?.data?.message);
           return null;
         } catch (error: any) {
-          console.log(error, 'error caught during login');
           const errorCallBack = {
             message: error?.response?.data?.message,
             internal_code: error?.response?.data?.internal_code,
@@ -99,14 +83,10 @@ export const authOptions: NextAuthOptions = {
         token.refreshToken = user.tokens?.refreshToken;
       }
 
-      //  Setelah login, cek refresh token
       if (token.accessToken) {
         const expired = checkIfTokenExpired(token.accessToken);
         if (expired) {
-          console.log(token.refreshToken, 'refresh token still valid');
-
           const updated = await refreshToken(token.refreshToken);
-          console.log(updated, 'updated token after refresh attempt');
           if (updated === 'logout') {
             token.signOutRequired = true;
           } else {
