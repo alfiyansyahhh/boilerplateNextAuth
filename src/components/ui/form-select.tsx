@@ -26,11 +26,15 @@ type FormSelectProps<T extends FieldValues> = {
   disabled?: boolean;
 };
 
-export const FormSelect = <T extends FieldValues>(
-  props: FormSelectProps<T>
-) => {
-  const { control, name, label, options, placeholder, required, disabled } =
-    props;
+export const FormSelect = <T extends FieldValues>({
+  control,
+  name,
+  label,
+  options,
+  placeholder,
+  required,
+  disabled,
+}: FormSelectProps<T>) => {
   const { t } = useTranslation();
 
   return (
@@ -46,13 +50,17 @@ export const FormSelect = <T extends FieldValues>(
             </FormLabel>
             <FormControl>
               <Select
-                value={field.value || ''}
-                onValueChange={field.onChange}
+                value={field.value}
+                onValueChange={(val) => {
+                  if (val !== '') {
+                    field.onChange(val);
+                  }
+                }}
                 disabled={disabled}
               >
                 <SelectTrigger className={cn('w-full')}>
                   <SelectValue
-                    placeholder={placeholder || t('Select an option')}
+                    placeholder={placeholder ?? t('Select an option')}
                   />
                 </SelectTrigger>
                 <SelectContent>
@@ -68,7 +76,7 @@ export const FormSelect = <T extends FieldValues>(
               </Select>
             </FormControl>
             {fieldState.error && (
-              <FormMessage className='text-xs mt-1'>
+              <FormMessage className='text-xs'>
                 {fieldState.error.message}
               </FormMessage>
             )}

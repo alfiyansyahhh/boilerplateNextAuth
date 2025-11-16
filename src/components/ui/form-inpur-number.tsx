@@ -28,11 +28,9 @@ export const FormNumberInput = <T extends FieldValues>({
   name,
   label,
   isPending,
-  placeholder,
   required,
   disabled,
   prefix,
-  thousandSeparator = true,
 }: FormNumberInputProps<T>) => {
   const { t } = useTranslation();
 
@@ -48,21 +46,23 @@ export const FormNumberInput = <T extends FieldValues>({
           </FormLabel>
           <FormControl>
             <NumericFormat
-              {...field}
+              value={field.value ?? ''}
               customInput={Input}
-              placeholder={t(placeholder ?? '')}
-              thousandSeparator={thousandSeparator}
+              thousandSeparator='.'
+              decimalSeparator=','
               prefix={prefix}
               disabled={isPending || disabled}
               className={cn(
                 'h-10 border placeholder:text-[#94A3B8] py-4 px-3.5 w-full',
                 disabled && 'bg-[#DDDDDD]'
               )}
-              onValueChange={(values) => field.onChange(values.value)}
+              onValueChange={(values) => {
+                field.onChange(values.floatValue ?? 0);
+              }}
             />
           </FormControl>
           {fieldState.error && (
-            <FormMessage className='text-xs mt-1'>
+            <FormMessage className='text-xs -mt-1'>
               {fieldState.error.message}
             </FormMessage>
           )}

@@ -13,6 +13,8 @@ const buttonVariants = cva(
           'bg-[#FBC037] text-black shadow-xs hover:bg-[#cf9b21] hover:text-white rounded-[4px] ',
         primary:
           'bg-[#01959F] text-white shadow-xs hover:bg-[#0e7077] hover:text-white rounded-[4px] ',
+        danger:
+          'bg-red-500 text-white shadow-xs hover:bg-red-500/20 hover:text-white rounded-[4px] ',
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:

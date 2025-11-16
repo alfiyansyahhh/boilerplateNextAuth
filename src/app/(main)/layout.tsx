@@ -1,6 +1,5 @@
 'use client';
 
-// import AppDashboardLayout from '@/layout/mainLayout.tsx';
 import { ReactNode } from 'react';
 import ProtectLayout from '@/layout/protectLayout';
 import { useSession } from 'next-auth/react';

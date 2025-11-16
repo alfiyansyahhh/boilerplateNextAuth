@@ -1,3 +1,5 @@
+'use client';
+
 import { Control, FieldValues, Path } from 'react-hook-form';
 import {
   FormControl,
@@ -20,49 +22,107 @@ type FormTextareaProps<T extends FieldValues> = {
   rows?: number;
 };
 
-export const FormTextarea = <T extends FieldValues>(
-  props: FormTextareaProps<T>
-) => {
-  const {
-    control,
-    name,
-    label,
-    placeholder,
-    required,
-    disabled,
-    isPending,
-    rows = 4,
-  } = props;
+export const FormTextarea = <T extends FieldValues>({
+  control,
+  name,
+  label,
+  placeholder,
+  required,
+  disabled,
+  isPending,
+  rows = 10,
+}: FormTextareaProps<T>) => {
   const { t } = useTranslation();
+
+  const convertFormatting = (text: string) => {
+    return text
+      .split('\n')
+      .map((line) => {
+        const trimmed = line.trim();
+
+        // Heading H3 → H2 → H1 (urutan penting)
+        if (trimmed.startsWith('### ')) {
+          return trimmed.replace(/^###\s?/, 'H3: ');
+        }
+        if (trimmed.startsWith('## ')) {
+          return trimmed.replace(/^##\s?/, 'H2: ');
+        }
+        if (trimmed.startsWith('# ')) {
+          return trimmed.replace(/^#\s?/, 'H1: ');
+        }
+
+        // Bullet list
+        if (trimmed.startsWith('- ')) {
+          return trimmed.replace(/^\s*-\s?/, '• ');
+        }
+
+        return line;
+      })
+      .join('\n');
+  };
 
   return (
     <FormField
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <FormItem>
-          <div className='flex flex-col space-y-1 w-full'>
-            <FormLabel>
-              {t(label)}{' '}
-              {required && <span className='text-red-500 -ml-2'>*</span>}
-            </FormLabel>
-            <FormControl>
-              <Textarea
-                {...field}
-                placeholder={t(placeholder ?? '')}
-                disabled={disabled || isPending}
-                rows={rows}
-                isError={fieldState.error}
-              />
-            </FormControl>
-            {fieldState.error && (
-              <FormMessage className='text-xs mt-1'>
-                {fieldState.error.message}
-              </FormMessage>
-            )}
-          </div>
+        <FormItem className='flex flex-col w-full space-y-2'>
+          <FormLabel>
+            {t(label)} {required && <span className='text-red-500'>*</span>}
+          </FormLabel>
+
+          <FormControl>
+            <Textarea
+              {...field}
+              placeholder={t(placeholder ?? '')}
+              disabled={disabled || isPending}
+              rows={rows}
+              className='h-auto min-h-[100px]'
+              isError={!!fieldState.error}
+              onChange={(e) => {
+                const formatted = convertFormatting(e.target.value);
+                field.onChange(formatted);
+              }}
+            />
+          </FormControl>
+
+          {fieldState.error && (
+            <FormMessage className='text-xs'>
+              {fieldState.error.message}
+            </FormMessage>
+          )}
         </FormItem>
       )}
     />
   );
 };
+
+// type Job = {
+//   description: string; // markdown asli dari backend
+// };
+
+// type Props = {
+//   job: Job;
+// };
+
+// export default function JobDetail({ job }: Props) {
+//   const convertFormatting = (text: string) => {
+//     return text
+//       .split("\n")
+//       .map((line) => {
+//         const trimmed = line.trim();
+//         if (trimmed.startsWith("### ")) return trimmed.replace(/^###\s?/, "H3: ");
+//         if (trimmed.startsWith("## ")) return trimmed.replace(/^##\s?/, "H2: ");
+//         if (trimmed.startsWith("# ")) return trimmed.replace(/^#\s?/, "H1: ");
+//         if (trimmed.startsWith("- ")) return trimmed.replace(/^- /, "• ");
+//         return line;
+//       })
+//       .join("\n");
+//   };
+
+//   return (
+//     <div className="border p-4 bg-gray-50 whitespace-pre-line">
+//       {convertFormatting(job.description)}
+//     </div>
+//   );
+// }

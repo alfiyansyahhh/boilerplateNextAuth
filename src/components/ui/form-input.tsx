@@ -95,6 +95,12 @@ export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
                       if (type === 'password') {
                         setPasswordValue(e.target.value);
                       }
+
+                      if (type === 'number') {
+                        const numericValue = e.target.value.replace(/\D/g, '');
+                        field.onChange(Number(numericValue));
+                        return;
+                      }
                       field.onChange(e);
                     }}
                     isError={!noShowError && fieldState.error}
@@ -121,7 +127,7 @@ export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
               )}
             </div>
 
-            {!noShowError && <FormMessage className='text-xs mt-1' />}
+            {!noShowError && <FormMessage className='text-xs ' />}
           </div>
         </FormItem>
       )}

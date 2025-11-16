@@ -95,9 +95,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    function generateSlug(text: string) {
+      return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    function generateUniqueSlug(title: string, existingSlugs: string[]) {
+      const baseSlug = generateSlug(title);
+      let uniqueSlug = baseSlug;
+      let counter = 2;
+      while (existingSlugs.includes(uniqueSlug)) {
+        uniqueSlug = `${baseSlug}-${counter}`;
+        counter++;
+      }
+      return uniqueSlug;
+    }
+
+    const existingSlugs = jobs.map((j) => j.slug);
+    const slug = generateUniqueSlug(body.title, existingSlugs);
+
     const newJob: Job = {
       id: `job_${Date.now()}`,
-      slug: body.slug || body.title.toLowerCase().replace(/\s+/g, '-'),
+      slug,
       title: body.title,
       job_type: body.job_type,
       description: body.description,
@@ -131,5 +154,77 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ data: newJob }, { status: 201 });
   } catch (err) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const body = await req.json();
+    if (!body.id) {
+      return NextResponse.json({ error: 'Job ID required' }, { status: 400 });
+    }
+
+    const index = jobs.findIndex((j) => j.id === body.id);
+    if (index === -1) {
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+    }
+
+    const job = jobs[index];
+
+    const updatedJob: Job = {
+      ...job,
+      title: body.title ?? job.title,
+      job_type: body.job_type ?? job.job_type,
+      description: body.description ?? job.description,
+      number_of_candidate: body.number_of_candidate ?? job.number_of_candidate,
+      salary_range: {
+        min: body.salary_range?.min ?? job.salary_range.min,
+        max: body.salary_range?.max ?? job.salary_range.max,
+        currency: body.salary_range?.currency ?? job.salary_range.currency,
+        display_text: `Rp${(
+          body.salary_range?.min ?? job.salary_range.min
+        ).toLocaleString()} - Rp${(
+          body.salary_range?.max ?? job.salary_range.max
+        ).toLocaleString()}`,
+      },
+      profile_requirements: {
+        ...job.profile_requirements,
+        ...body.profile_requirements,
+      },
+      status: body.status ?? job.status,
+      list_card: {
+        badge: body.status ?? job.status,
+        started_on_text: job.list_card.started_on_text,
+        cta: body.status === 'Active' ? 'Manage Job' : 'Edit Job',
+      },
+    };
+
+    jobs[index] = updatedJob;
+
+    return NextResponse.json({ data: updatedJob });
+  } catch (err) {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'Job ID required' }, { status: 400 });
+    }
+
+    const index = jobs.findIndex((j) => j.id === id);
+    if (index === -1) {
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+    }
+
+    const deletedJob = jobs.splice(index, 1)[0];
+
+    return NextResponse.json({ data: deletedJob });
+  } catch (err) {
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }
