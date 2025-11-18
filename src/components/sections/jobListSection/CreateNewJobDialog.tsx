@@ -103,8 +103,6 @@ const CreateNewJobModal = ({
       if (promise) {
         promise
           .then((res) => {
-            console.log(`${status} job`, res);
-
             if (status === 'Delete' && jobId) {
               jobsStore.removeJob(jobId);
             } else if (jobId) {

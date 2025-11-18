@@ -1,70 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-type ProfileFieldOption = 'Mandatory' | 'Optional' | 'Off';
-
-interface Job {
-  id: string;
-  slug: string;
-  title: string;
-  job_type: string;
-  description: string;
-  number_of_candidate: number;
-  salary_range: {
-    min: number;
-    max: number;
-    currency: string;
-    display_text: string;
-  };
-  profile_requirements: {
-    full_name: ProfileFieldOption;
-    photo_profile: ProfileFieldOption;
-    gender: ProfileFieldOption;
-    domicile: ProfileFieldOption;
-    email: ProfileFieldOption;
-    phone_number: ProfileFieldOption;
-    linkedin_link: ProfileFieldOption;
-    date_of_birth: ProfileFieldOption;
-  };
-  status: 'Active' | 'Inactive' | 'Draft';
-  list_card: {
-    badge: 'Active' | 'Inactive' | 'Draft';
-    started_on_text: string;
-    cta: string;
-  };
-}
-
-let jobs: Job[] = [
-  {
-    id: 'job_20251001_0001',
-    slug: 'frontend-developer',
-    title: 'Frontend Developer',
-    job_type: 'Fulltime',
-    description: 'Frontend developer for web apps',
-    number_of_candidate: 2,
-    salary_range: {
-      min: 7000000,
-      max: 8000000,
-      currency: 'IDR',
-      display_text: 'Rp7.000.000 - Rp8.000.000',
-    },
-    profile_requirements: {
-      full_name: 'Mandatory',
-      photo_profile: 'Optional',
-      gender: 'Off',
-      domicile: 'Mandatory',
-      email: 'Mandatory',
-      phone_number: 'Mandatory',
-      linkedin_link: 'Optional',
-      date_of_birth: 'Optional',
-    },
-    status: 'Active',
-    list_card: {
-      badge: 'Active',
-      started_on_text: 'started on 1 Oct 2025',
-      cta: 'Manage Job',
-    },
-  },
-];
+import { Job, jobs } from '../dummyData/job';
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
@@ -145,8 +80,9 @@ export async function POST(req: NextRequest) {
       list_card: {
         badge: body.status || 'Draft',
         started_on_text: `started on ${new Date().toLocaleDateString()}`,
-        cta: body.status === 'Active' ? 'Manage Job' : 'Edit Job',
+        cta: 'Manage Job',
       },
+      candidate_ids: [],
     };
 
     jobs.push(newJob);
@@ -168,8 +104,36 @@ export async function PUT(req: NextRequest) {
     if (index === -1) {
       return NextResponse.json({ error: 'Job not found' }, { status: 404 });
     }
-
     const job = jobs[index];
+
+    if (body.candidate_id) {
+      if (typeof body.candidate_id !== 'string') {
+        return NextResponse.json(
+          { error: 'Candidate ID must be a string' },
+          { status: 400 }
+        );
+      }
+
+      if (job.candidate_ids.includes(body.candidate_id)) {
+        return NextResponse.json(
+          {
+            error: `Candidate ID ${body.candidate_id} already exists in this job.`,
+          },
+          { status: 400 }
+        );
+      }
+
+      if (job.candidate_ids.length === job.number_of_candidate) {
+        return NextResponse.json(
+          {
+            error: `The maximum number of candidates (${job.number_of_candidate}) has already been reached.`,
+          },
+          { status: 400 }
+        );
+      }
+
+      job.candidate_ids.push(body.candidate_id);
+    }
 
     const updatedJob: Job = {
       ...job,
@@ -195,8 +159,9 @@ export async function PUT(req: NextRequest) {
       list_card: {
         badge: body.status ?? job.status,
         started_on_text: job.list_card.started_on_text,
-        cta: body.status === 'Active' ? 'Manage Job' : 'Edit Job',
+        cta: 'Manage Job',
       },
+      candidate_ids: [],
     };
 
     jobs[index] = updatedJob;

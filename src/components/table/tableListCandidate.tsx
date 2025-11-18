@@ -82,7 +82,7 @@ export function CandidateTable({ dataBe }: Props) {
       cell: ({ row }: any) => (
         <div className='sticky left-0 bg-white z-10'>
           <Checkbox
-            className='border-[#01959F] w-5 h-5 data-[state=checked]:border-[#01959F] data-[state=checked]:bg-[#01959F]'
+            className='border-[#01959F] mt-1  w-5 h-5 data-[state=checked]:border-[#01959F] data-[state=checked]:bg-[#01959F]'
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
           />

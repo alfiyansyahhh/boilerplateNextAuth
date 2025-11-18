@@ -120,15 +120,15 @@ export function DataTable<T extends { id: string }>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header, index) => {
-                  const isSticky = index === 0 || index === 1;
+                  const isSticky = (stickyColumn && index === 0) || index === 1;
 
                   return (
                     <TableHead
                       key={header.id}
                       className={`p-4 font-bold ${
-                        isSticky ? 'sticky z-20 ' : ''
+                        isSticky ? 'sticky z-20 bg-gray-50' : ''
                       } ${isSticky && index === 0 ? 'left-0' : ''} ${
-                        isSticky && index === 1 ? 'left-10' : ''
+                        isSticky && index === 1 ? 'left-10 z-30' : ''
                       }`}
                     >
                       {header.isPlaceholder
@@ -137,6 +137,10 @@ export function DataTable<T extends { id: string }>({
                             header.column.columnDef.header,
                             header.getContext()
                           )}
+
+                      {isSticky && index === 1 && (
+                        <span className='absolute top-0 right-0 h-full w-[1.5px] bg-gray-100'></span>
+                      )}
                     </TableHead>
                   );
                 })}
@@ -152,14 +156,13 @@ export function DataTable<T extends { id: string }>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell, index) => {
-                    // Cek apakah ini kolom pertama atau kedua
                     const isSticky = index === 0 || index === 1;
 
                     return (
                       <TableCell
                         key={cell.id}
                         className={`bg-white p-4 ${
-                          isSticky ? 'sticky  shadow z-10' : ''
+                          isSticky ? 'sticky z-10' : ''
                         } ${isSticky && index === 0 ? 'left-0' : ''} ${
                           isSticky && index === 1 ? 'left-10' : ''
                         }`}
@@ -167,6 +170,10 @@ export function DataTable<T extends { id: string }>({
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
+                        )}
+
+                        {isSticky && index === 1 && (
+                          <span className='absolute top-0 right-0 h-full w-[1.5px] shadow-2xl bg-gray-100'></span>
                         )}
                       </TableCell>
                     );

@@ -19,22 +19,21 @@ interface Attribute {
 }
 
 const ManageJob = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const url = new URL('/api/candidate', process.env.NEXT_PUBLIC_BASE_URL);
+  const { id } = await params;
+
+  const url = new URL(`/api/jobs/${id}`, process.env.NEXT_PUBLIC_BASE_URL);
 
   const res = await fetch(url.toString(), {
     cache: 'no-store',
   });
 
   const data = await res.json();
-  const candidates: Candidate[] = data.data;
-
-  const { id } = await params;
-
+  const candidates: Candidate[] = data.candidates;
   return (
     <>
       <ManageJobSection
         jobId={id}
-        list={candidates}
+        list={candidates || []}
       />
     </>
   );

@@ -19,7 +19,6 @@ export const useBreadcrumbStore = create<BreadcrumbState>()(
     (set, get) => ({
       crumbs: [],
       setCrumbs: (crumbs) => {
-        console.log(crumbs, 'crumbs set');
         set({ crumbs });
       },
       addCrumbs: (crumb) =>

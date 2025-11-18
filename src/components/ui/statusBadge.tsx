@@ -12,7 +12,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
       bgColor = 'bg-[#F8FBF9] border-[#B8DBCA] border text-[#43936C]';
       break;
     case 'inactive':
-      bgColor = 'bg-[#F8FBF9] border-[#B8DBCA] border text-[#43936C]';
+      bgColor = 'bg-[#FFFAFA] border-[#F5B1B7] border text-[#E11428]';
       break;
     case 'draft':
       bgColor = 'bg-[#FFFCF5] border-[#FEEABC] border text-[#FBC037]';

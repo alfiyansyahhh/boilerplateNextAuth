@@ -51,3 +51,35 @@ export const deleteJob = async (id: string) => {
     console.log(e, 'error refresh token');
   }
 };
+
+export const deactiveJob = async (id: string) => {
+  try {
+    const objProvider: IProvider = {
+      method: MutationTypes.POST,
+      path: 'api/jobs/deactive/' + id,
+    };
+    const response = await provider(objProvider);
+    if (!response) toast.error('Network Error');
+    if (response.status === 200) {
+      return response.data.data;
+    }
+  } catch (e: any) {
+    console.log(e, 'error refresh token');
+  }
+};
+
+export const publishJob = async (id: string) => {
+  try {
+    const objProvider: IProvider = {
+      method: MutationTypes.POST,
+      path: 'api/jobs/publish/' + id,
+    };
+    const response = await provider(objProvider);
+    if (!response) toast.error('Network Error');
+    if (response.status === 200) {
+      return response.data.data;
+    }
+  } catch (e: any) {
+    console.log(e, 'error refresh token');
+  }
+};
