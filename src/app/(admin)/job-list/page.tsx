@@ -44,14 +44,14 @@ const JobList = async ({ searchParams }: MessagePageProps) => {
   const jobs: Job[] = data.data;
 
   return (
-    <div className='flex flex-wrap-reverse  gap-5 h-screen overflow-auto scrollbar'>
-      <div className='w-[1043px] mr-3'>
-        <div className=' mt-1 sm:mx-2 bg-white z-10 pb-2'>
-          <SearchBox placeholder='Search by job details' />
+    <div className="flex flex-wrap-reverse  gap-5 h-screen overflow-auto scrollbar">
+      <div className="w-[1043px] mr-3">
+        <div className=" mt-1 sm:mx-2 bg-white z-10 pb-2">
+          <SearchBox placeholder="Search by job details" />
         </div>
         <JobListSection list={jobs} />
       </div>
-      <div className='w-full sm:w-auto  mr-5 z-10 pb-2'>
+      <div className="w-full sm:w-auto  mr-5 z-10 pb-2">
         <CardRecrutCandidat />
       </div>
     </div>
