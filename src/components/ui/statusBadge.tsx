@@ -1,13 +1,13 @@
 import React from 'react';
 
 interface StatusBadgeProps {
-  status: 'Active' | 'Inactive' | 'Draft' | string;
+  status: 'Active' | 'Inactive' | 'Draft' | string | undefined;
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   let bgColor = '';
 
-  switch (status.toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case 'active':
       bgColor = 'bg-[#F8FBF9] border-[#B8DBCA] border text-[#43936C]';
       break;

@@ -1,4 +1,3 @@
-// api/jobs/[jobId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { jobs } from '../../dummyData/job';
 import { candidate } from '../../dummyData/candidate';
@@ -26,12 +25,12 @@ export async function GET(
     .map((candidateId) => candidate.find((c) => c.id === candidateId))
     .filter(Boolean); //
 
-  if (jobCandidates.length === 0) {
-    return NextResponse.json(
-      { message: 'No candidates found for this job' },
-      { status: 404 }
-    );
-  }
+  // if (jobCandidates.length === 0) {
+  //   return NextResponse.json(
+  //     { message: 'No candidates found for this job' },
+  //     { status: 404 }
+  //   );
+  // }
 
-  return NextResponse.json({ candidates: jobCandidates });
+  return NextResponse.json({ ...job, candidates: jobCandidates || [] });
 }

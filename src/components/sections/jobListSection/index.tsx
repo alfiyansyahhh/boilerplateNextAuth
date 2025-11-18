@@ -3,18 +3,13 @@
 import { Button } from '@/components/ui/button';
 import NoJobsPlaceholder from './noJobsPlaceholder';
 import StatusBadge from '@/components/ui/statusBadge';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useJobs } from '@/zustand/store/useJobs';
-import CreateNewJobDialog from './CreateNewJobDialog';
 import { useBreadcrumbStore } from '@/zustand/store/useBreadCrumb';
 import { useRouter } from 'next/navigation';
-
 import CardActionJob from '@/components/card/cardActionJob';
 
 const JobListSection = ({ list }: { list: any }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [jobId, setJobId] = useState('');
-
   const setJobs = useJobs((state) => state.setJobs);
 
   let router = useRouter();
@@ -35,8 +30,6 @@ const JobListSection = ({ list }: { list: any }) => {
 
   return (
     <div className='sm:min-w-[400px] mx-3'>
-      <CreateNewJobDialog {...{ isOpen, setIsOpen, jobId }} />
-
       <div className='mt-5 sm:mx-3 pb-40'>
         {jobs.length > 0 ? (
           jobs.map((job: any, i: number) => (

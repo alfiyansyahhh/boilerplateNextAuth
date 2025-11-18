@@ -10,14 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+
 import { LogOut } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import DynamicBreadcrumb from '@/components/ui/breadcrumb-list';
@@ -27,8 +20,8 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className='mx-auto overflow-hidden h-screen '>
-      <div className='border'>
-        <div className='max-w-[1440px] h-16  items-center flex justify-between px-4  mx-auto '>
+      <div className=' shadow-md'>
+        <div className='max-w-[1440px] h-16   items-center flex justify-between px-4  mx-auto '>
           <div>
             <DynamicBreadcrumb />
           </div>

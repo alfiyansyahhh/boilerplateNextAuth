@@ -2,28 +2,11 @@ import CardRecrutCandidat from '@/components/card/cardRecrutCandidat';
 import { Metadata } from 'next';
 import JobListSection from '@/components/sections/jobListSection';
 import SearchBox from '@/components/ui/searchBox';
+import { Job } from '@/zustand/store/useJobs';
 
 export const metadata: Metadata = {
   title: 'JobList ',
 };
-
-interface Job {
-  id: string;
-  slug: string;
-  title: string;
-  status: string;
-  salary_range: {
-    min: number;
-    max: number;
-    currency: string;
-    display_text: string;
-  };
-  list_card: {
-    badge: string;
-    started_on_text: string;
-    cta: string;
-  };
-}
 
 interface MessagePageProps {
   searchParams: Promise<{ [key: string]: string }>;
