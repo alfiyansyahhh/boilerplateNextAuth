@@ -20,9 +20,13 @@ const JobListCandidate = async ({
 
   const data = await res.json();
   const job: Job = data;
+
   return (
     <div>
-      <JobListApplicantSection dataJob={job} />
+      <JobListApplicantSection
+        dataJob={job}
+        id={id}
+      />
     </div>
   );
 };

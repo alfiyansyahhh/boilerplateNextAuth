@@ -10,9 +10,11 @@ import { useRouter } from 'next/navigation';
 const JobListApplicantSection = ({
   list,
   dataJob,
+  id,
 }: {
   list?: Job[];
   dataJob?: Job;
+  id: any;
 }) => {
   const setJobs = useJobs((state) => state.setJobs);
 
@@ -46,6 +48,7 @@ const JobListApplicantSection = ({
       <JobList
         list={jobs}
         isDetail={Boolean(dataJob)}
+        jobId={id}
       />
 
       {/* detail */}
@@ -77,7 +80,12 @@ const JobListApplicantSection = ({
                   <div className='text-[14px] text-[#757575]'>Rakamin</div>
                 </div>
               </div>
-              <Button className='font-bold h-8 w-[71px]'>Apply</Button>
+              <Button
+                className='font-bold h-8 w-[71px]'
+                onClick={() => router.push(`/apply-job/${id}`)}
+              >
+                Apply
+              </Button>
             </div>
 
             <div className='py-5  whitespace-pre-line'>

@@ -3,7 +3,15 @@ import { Banknote, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-const JobList = ({ list, isDetail }: { list?: Job[]; isDetail?: boolean }) => {
+const JobList = ({
+  list,
+  isDetail,
+  jobId,
+}: {
+  list?: Job[];
+  isDetail?: boolean;
+  jobId?: string;
+}) => {
   let router = useRouter();
   return (
     <div
@@ -17,7 +25,9 @@ const JobList = ({ list, isDetail }: { list?: Job[]; isDetail?: boolean }) => {
           <div
             key={index}
             onClick={() => router.push(`/job-list-candidate/${job.id}`)}
-            className='w-full h-[140px] cursor-pointer my-5 border-2 active:border-[#01777F] hover:border-[#01777F] hover:bg-[#F7FEFF] rounded-xl py-3 px-[18px]'
+            className={`${
+              job?.id === jobId && 'border-[#01777F] bg-[#F7FEFF]'
+            } w-full h-[140px] cursor-pointer my-5 border-2  hover:border-[#01777F] hover:bg-[#F7FEFF] rounded-xl py-3 px-[18px]`}
           >
             <div className='flex gap-3 border-b pb-3'>
               <Image
