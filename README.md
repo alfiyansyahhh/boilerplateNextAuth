@@ -28,7 +28,7 @@ Job Portal – Hiring Management Web App adalah aplikasi web interaktif yang dir
 > Pelamar dapat melihat lowongan aktif, mengisi formulir aplikasi dinamis sesuai konfigurasi lowongan, dan mengunggah foto profil menggunakan fitur webcam berbasis gesture (**react-webcam** + fingerpose detection). Sistem secara otomatis mendeteksi pose tangan (jari 1️⃣ 2️⃣ 3️⃣) dan langsung mengambil foto profil ketika pose 3 terdeteksi.
 
 
-![](https://i.ibb.co.com/8D7YKK5V/ezgif-3c62573a1a9c3462.gif)
+![](https://job-portal-nextjs-seven.vercel.app/ingerpose-demo.gif)
 
 ## Features
 
