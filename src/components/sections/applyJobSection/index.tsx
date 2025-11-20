@@ -58,20 +58,17 @@ const ApplyJobSection = ({ dataJob }: { dataJob?: Job }) => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   let router = useRouter();
 
-  const profileRequirements =
-    // dataJob?.application_form?.sections[0]
-    //   ?.fields
-    //   ||
-    [
-      { key: 'full_name', validation: { required: true } },
-      { key: 'photo_profile', validation: { required: false } },
-      { key: 'gender', validation: { required: false } },
-      { key: 'domicile', validation: { required: false } },
-      { key: 'email', validation: { required: false } },
-      { key: 'phone_number', validation: { required: false } },
-      { key: 'linkedin_link', validation: { required: false } },
-      { key: 'date_of_birth', validation: { required: false } },
-    ];
+  const profileRequirements = dataJob?.application_form?.sections[0]
+    ?.fields || [
+    { key: 'full_name', validation: { required: true } },
+    { key: 'photo_profile', validation: { required: false } },
+    { key: 'gender', validation: { required: false } },
+    { key: 'domicile', validation: { required: false } },
+    { key: 'email', validation: { required: false } },
+    { key: 'phone_number', validation: { required: false } },
+    { key: 'linkedin_link', validation: { required: false } },
+    { key: 'date_of_birth', validation: { required: false } },
+  ];
 
   const profileRequirementsSchema =
     buildProfileRequirementsSchema(profileRequirements);
