@@ -68,9 +68,9 @@ Job Portal – Hiring Management Web App adalah aplikasi web interaktif yang dir
 - [x] Implement authentication with NextAuth  
 - [x] Setup Zustand state management  
 - [x] Create forms with React Hook Form + Zod validation  
-- [ ] Integrate ShadCN UI components  
-- [ ] Deploy to Vercel  
-- [ ] Add advanced features / enhancements  
+- [x] Integrate ShadCN UI components  
+- [x] Deploy to Vercel  
+- [x] Add advanced features / enhancements  
 
 </details>
 
