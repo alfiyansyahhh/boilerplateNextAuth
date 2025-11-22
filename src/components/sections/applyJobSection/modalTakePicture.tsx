@@ -85,13 +85,15 @@ const ModalTakePicture = ({
               )}
             </div>
 
-            <div className='text-[12px] mb-4'>
-              To take a picture, follow the hand poses in the order shown below.
-              The system will automatically capture the image once the final
-              pose is detected.
-            </div>
+            {!tempCapturedImage && (
+              <div className='text-[12px] mb-4'>
+                To take a picture, follow the hand poses in the order shown
+                below. The system will automatically capture the image once the
+                final pose is detected.
+              </div>
+            )}
 
-            {!capturedImage && (
+            {!tempCapturedImage && (
               <div className='flex gap-3 my-6 w-full justify-center items-center'>
                 <Image
                   src={'/img/Open-Camera1.png'}
