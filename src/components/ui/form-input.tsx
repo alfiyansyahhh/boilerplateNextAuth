@@ -80,7 +80,7 @@ export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
               )}
             >
               {t(label)}{" "}
-              {required && <div className="text-destructive ml-1">*</div>}
+              {required && <div className="text-destructive -ml-1">*</div>}
             </FormLabel>
 
             <div className={cn("flex items-center gap-2 w-full", inputWidth)}>
@@ -118,7 +118,7 @@ export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
                   {type === "password" && (
                     <div
                       onClick={togglePasswordVisibility}
-                      className="absolute right-5 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
                     >
                       {!showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </div>
