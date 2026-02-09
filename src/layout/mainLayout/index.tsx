@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ReactNode } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   DropdownMenu,
@@ -8,40 +8,35 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
-import { LogIn, LogOut } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
-import DynamicBreadcrumb from '@/components/ui/breadcrumb-list';
-import { useRouter } from 'next/navigation';
+import { LogIn, LogOut } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
   let router = useRouter();
   return (
-    <div className='mx-auto overflow-hidden h-screen '>
-      <div className=' shadow-md'>
-        <div className='max-w-[1440px] h-16   items-center flex justify-between px-4  mx-auto '>
-          <div>
-            <DynamicBreadcrumb />
-          </div>
-
+    <div className="mx-auto overflow-hidden h-screen ">
+      <div className=" shadow-md">
+        <div className="max-w-[1440px] h-16   items-center flex justify-between px-4  mx-auto ">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Avatar className='cursor-pointer'>
-                <AvatarImage src='https://github.com/shadcn.png' />
+              <Avatar className="cursor-pointer">
+                <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent align="end">
               <DropdownMenuLabel>
                 {session && (
                   <>
-                    <div className='font-bold text-md'>
-                      {' '}
+                    <div className="font-bold text-md">
+                      {" "}
                       {session?.user?.name}
                     </div>
-                    <div className='text-sm'> {session?.user?.email}</div>
+                    <div className="text-sm"> {session?.user?.email}</div>
                   </>
                 )}
               </DropdownMenuLabel>
@@ -51,7 +46,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
                   onClick={() => {
                     localStorage.clear();
                     signOut({
-                      callbackUrl: '/job-list-candidate',
+                      callbackUrl: "/login",
                     });
                   }}
                 >
@@ -61,7 +56,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
               ) : (
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('/login');
+                    router.push("/login");
                   }}
                 >
                   <LogIn size={18} />
@@ -72,8 +67,8 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           </DropdownMenu>
         </div>
       </div>
-      <div className='max-w-[1440px]  mx-auto '>
-        <div className='py-5 px-4'>{children}</div>
+      <div className="max-w-[1440px]  mx-auto ">
+        <div className="py-5 px-4">{children}</div>
       </div>
     </div>
   );

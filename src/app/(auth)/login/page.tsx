@@ -1,14 +1,14 @@
-import LoginForm from '@/components/form/login-form';
-import AuthLayout from '@/layout/authLayout';
-import { Metadata } from 'next';
+import LoginForm from "@/components/form/login-form";
+import AuthLayout from "@/layout/authLayout";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Login ',
+  title: "Login ",
 };
 
 const Login = () => {
   return (
-    <AuthLayout title='Masuk ke Rakamin'>
+    <AuthLayout title="Masuk ">
       <LoginForm />
     </AuthLayout>
   );

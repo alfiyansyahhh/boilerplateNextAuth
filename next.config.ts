@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false, // nonaktifkan strict mode React
+  reactStrictMode: true,
   typescript: {
-    ignoreBuildErrors: true, // abaikan error TypeScript saat build
+    ignoreBuildErrors: false,
   },
-  output: 'standalone',
+  output: "standalone",
 };
 
 module.exports = nextConfig;

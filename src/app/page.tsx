@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/job-list-candidate');
+    router.push("/login");
   }, [router]);
 };
 
