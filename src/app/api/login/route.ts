@@ -1,25 +1,42 @@
-import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-const secretKey = process.env.NEXT_PUBLIC_JWT_SECRET_KEY || 'your-secret-key';
+const secretKey = process.env.NEXT_PUBLIC_JWT_SECRET_KEY || "your-secret-key";
 const refreshTokenSecret =
-  process.env.NEXT_PUBLIC_JWT_REFRESH_SECRET_KEY || 'your-refresh-secret-key';
+  process.env.NEXT_PUBLIC_JWT_REFRESH_SECRET_KEY || "your-refresh-secret-key";
 
 // Dummy User Data
-const users = [
+export let users: {
+  id: number;
+  name: string;
+  email: string;
+  password?: string;
+  image?: string;
+  role: string;
+  provider: string;
+}[] = [
   {
     id: 1,
-    name: 'Admin Recruiter',
-    email: 'admin@example.com',
-    password: 'admin123',
-    role: 'admin',
+    name: "Admin Recruiter",
+    email: "admin@example.com",
+    password: "admin123",
+    role: "admin",
+    provider: "credentials",
   },
   {
     id: 2,
-    name: 'Applicant User',
-    email: 'applicant@example.com',
-    password: 'applicant123',
-    role: 'applicant',
+    name: "Applicant User",
+    email: "applicant@example.com",
+    password: "applicant123",
+    role: "applicant",
+    provider: "credentials",
+  },
+  {
+    id: 3,
+    name: "My Google Admin",
+    email: "muhamadilhamalfiyansyah@gmail.com",
+    role: "admin",
+    provider: "google",
   },
 ];
 
@@ -33,13 +50,13 @@ const generateTokens = (user: {
   const accessToken = jwt.sign(
     { userId: user.id, email: user.email, role: user.role },
     secretKey,
-    { expiresIn: '15m' }
+    { expiresIn: "15m" },
   );
 
   const refreshToken = jwt.sign(
     { userId: user.id, email: user.email },
     refreshTokenSecret,
-    { expiresIn: '7d' }
+    { expiresIn: "7d" },
   );
 
   return { accessToken, refreshToken };
@@ -55,9 +72,9 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Email and password are required.',
+        message: "Email and password are required.",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -68,9 +85,9 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Invalid email or password',
+        message: "Invalid email or password",
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -81,7 +98,7 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       success: true,
-      message: 'Login successful',
+      message: "Login successful",
       tokens: {
         accessToken,
         refreshToken,
@@ -93,14 +110,14 @@ export async function POST(request: Request) {
         role: user.role,
       },
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
 
 // Optional: handle other methods (405)
 export function GET() {
   return NextResponse.json(
-    { success: false, message: 'Method Not Allowed' },
-    { status: 405 }
+    { success: false, message: "Method Not Allowed" },
+    { status: 405 },
   );
 }

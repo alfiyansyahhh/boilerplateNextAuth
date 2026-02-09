@@ -13,15 +13,21 @@ const LanguageTabs = () => {
   ];
 
   const { i18n } = useTranslation();
-  const [selectedLanguage, setSelectedLanguage] = React.useState<Lang>(
-    i18n.language === "ENG" ? "ENG" : "INA",
-  );
+  const [selectedLanguage, setSelectedLanguage] = React.useState<Lang>("INA");
 
   const handleLanguageChange = (lang: Lang) => {
     i18n.changeLanguage(lang);
     setSelectedLanguage(lang);
     localStorage.setItem("appLanguage", lang);
   };
+
+  React.useEffect(() => {
+    const savedLang = localStorage.getItem("appLanguage");
+    if (savedLang === "ENG" || savedLang === "INA") {
+      i18n.changeLanguage(savedLang);
+      setSelectedLanguage(savedLang);
+    }
+  }, []);
 
   React.useEffect(() => {
     setSelectedLanguage(i18n.language === "ENG" ? "ENG" : "INA");

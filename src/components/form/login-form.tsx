@@ -34,24 +34,70 @@ const LoginForm = () => {
   const handleSubmit = form.handleSubmit(async (values) => {
     setisPending(true);
 
-    signIn("credentials", {
-      redirect: false,
-      email: values.email,
-      password: values.password,
-    })
-      .then((data: any) => {
-        setisPending(false);
-        if (data?.status === 200) {
-          router.push("/dashboard");
-        } else {
-          console.log(data);
-          toast.error("Something went wrong.");
-        }
-      })
-      .catch(() => {
-        setisPending(false);
-        toast.error("Something went wrong.");
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
       });
+
+      setisPending(false);
+
+      if (result?.ok) {
+        toast.success(t("Login successful!"));
+        router.push("/dashboard");
+        return;
+      }
+
+      if (result?.error) {
+        try {
+          const errorData = JSON.parse(result.error);
+          const statusCode = errorData.httpStatus || errorData.code;
+
+          switch (statusCode) {
+            case 400:
+              toast.error(t("Please enter valid credentials"));
+              break;
+            case 401:
+              toast.error(t("Email or password is incorrect"));
+              break;
+            case 403:
+              toast.error(t("Account is locked or suspended"));
+              break;
+            case 404:
+              toast.error(t("Account not found"));
+              break;
+            case 429:
+              toast.error(t("Too many login attempts. Please try again later"));
+              break;
+            case 500:
+              toast.error(t("Server error. Please try again later"));
+              break;
+            case 503:
+              toast.error(t("Service temporarily unavailable"));
+              break;
+            default:
+              if (errorData.message) {
+                toast.error(errorData.message);
+              } else {
+                toast.error(t("Invalid email or password"));
+              }
+          }
+        } catch (e) {
+          toast.error(t("Invalid email or password"));
+        }
+      } else {
+        toast.error(t("Something went wrong."));
+      }
+    } catch (error: any) {
+      setisPending(false);
+
+      if (error.message === "Network Error" || !error.response) {
+        toast.error(t("Network error. Please check your connection"));
+      } else {
+        toast.error(t("Something went wrong."));
+      }
+    }
   });
 
   return (
@@ -62,17 +108,17 @@ const LoginForm = () => {
             <FormInput
               control={form.control}
               name="email"
-              label="E-mail"
+              label={t("E-mail")}
               type="email"
-              placeholder="Masukkan E-mail"
+              placeholder={t("Masukkan E-mail")}
               isPending={isPending}
             />
             <FormInput
               control={form.control}
               name="password"
-              label="Password"
+              label={t("Password")}
               type="password"
-              placeholder="Masukkan Kata Sandi"
+              placeholder={t("Masukkan Kata Sandi")}
               isPending={isPending}
               required
               noShowError

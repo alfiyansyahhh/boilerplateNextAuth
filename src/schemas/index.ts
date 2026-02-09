@@ -13,6 +13,12 @@ export const loginSchema = userSchema.pick({
   password: true,
 });
 
+export const registerSchema = userSchema.pick({
+  name: true,
+  email: true,
+  password: true,
+});
+
 export const createJobSchema = z.object({
   title: z.string().nonempty('Title is required'),
   job_type: z.string().nonempty('Job type is required'),

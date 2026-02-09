@@ -1,76 +1,41 @@
+"use client";
+
 import { ReactNode } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import { LogIn, LogOut } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { I18nextProvider } from "react-i18next";
+import i18n from "@/config/i18n";
+import React from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+import DashboardNavbar from "./navbar";
+
 const MainLayout = ({ children }: { children: ReactNode }) => {
-  const { data: session } = useSession();
-  let router = useRouter();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="mx-auto overflow-hidden h-screen ">
-      <div className=" shadow-md">
-        <div className="max-w-[1440px] h-16   items-center flex justify-between px-4  mx-auto ">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Avatar className="cursor-pointer">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                {session && (
-                  <>
-                    <div className="font-bold text-md">
-                      {" "}
-                      {session?.user?.name}
-                    </div>
-                    <div className="text-sm"> {session?.user?.email}</div>
-                  </>
-                )}
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {session ? (
-                <DropdownMenuItem
-                  onClick={() => {
-                    localStorage.clear();
-                    signOut({
-                      callbackUrl: "/login",
-                    });
-                  }}
-                >
-                  <LogOut size={18} />
-                  <div>Sign Out</div>
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push("/login");
-                  }}
-                >
-                  <LogIn size={18} />
-                  <div>Sign In</div>
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+    <I18nextProvider i18n={i18n}>
+      <div className="min-h-screen bg-background">
+        <DashboardNavbar />
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {children}
+        </main>
       </div>
-      <div className="max-w-[1440px]  mx-auto ">
-        <div className="py-5 px-4">{children}</div>
-      </div>
-    </div>
+    </I18nextProvider>
   );
 };
 

@@ -14,16 +14,10 @@ const resources = {
   },
 };
 
-// Cek apakah sedang di browser
-const isClient = typeof window !== 'undefined';
-
-const savedLang = isClient
-  ? localStorage.getItem('appLanguage') || 'INA'
-  : 'INA';
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: savedLang,
+  lng: 'INA',
   interpolation: {
     escapeValue: false,
   },

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const Login = () => {
   return (
-    <AuthLayout title="Masuk ">
+    <AuthLayout title="Masuk">
       <LoginForm />
     </AuthLayout>
   );
